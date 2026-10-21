@@ -1,0 +1,8 @@
+pymupdf
+groq
+pydantic
+python-dotenv
+pymongo
+streamlit
+openai-whisper
+

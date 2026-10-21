@@ -1,0 +1,136 @@
+# Environment Variables
+.env
+.env.local
+.env.*.local
+atlas-credentials.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Streamlit
+.streamlit/
+streamlit_cache/
+.streamlit/secrets.toml
+
+# Whisper Model Cache
+models/
+whisper_models/
+*.pt
+*.bin
+
+# MongoDB & Data
+*.db
+*.sqlite
+*.sqlite3
+mongo_data/
+data/
+
+# Logs
+*.log
+logs/
+*.out
+
+# Temporary Files
+*.tmp
+*.bak
+*.swp
+temp/
+tmp/
+.temp/
+
+# OS Specific
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Output & Generated Files
+output/
+invoices/
+*.json
+!requirements.txt
+!config.json
+
+# Secrets & Credentials
+secrets.json
+secrets.yaml
+credentials.json
+api_keys.json
+*.pem
+*.key
+*.crt
+
+# Dependencies (optional - uncomment if using lock files)
+# poetry.lock
+# Pipfile.lock
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Documentation
+site/
+docs/_build/
+
+# Node modules (if using any Node tools)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# MacOS
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+.nfs*
+
+# Windows
+$RECYCLE.BIN/
+ehthumbs.db
