@@ -27,7 +27,6 @@ from mongodb_handler import MongoDBHandler
 
 st.set_page_config(
     page_title="Invoice Extractor",
-    page_icon="📄",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -128,7 +127,7 @@ def get_mongodb_status() -> tuple:
 # UI Layout
 # ============================================================
 
-st.markdown("<h1 class='main-header'>📄 Invoice Data Extractor</h1>", unsafe_allow_html=True)
+st.markdown("<h1 class='main-header'>Invoice Data Extractor</h1>", unsafe_allow_html=True)
 
 # Sidebar
 with st.sidebar:
@@ -137,15 +136,15 @@ with st.sidebar:
     
     is_connected, status = get_mongodb_status()
     if is_connected:
-        st.success(f"✓ Connected to MongoDB\n**Total Invoices:** {status}")
+        st.success(f"Connected to MongoDB\n**Total Invoices:** {status}")
     else:
-        st.error(f"✗ MongoDB Error: {status}")
+        st.error(f"MongoDB Error: {status}")
 
 # Main content
 col1, col2 = st.columns([1, 1])
 
 with col1:
-    st.subheader("📤 Upload Invoice(s)")
+    st.subheader("Upload Invoice(s)")
     
     uploaded_files = st.file_uploader(
         "Choose PDF file(s) to extract invoice data",
@@ -157,7 +156,7 @@ with col1:
     if uploaded_files:
         st.write(f"**{len(uploaded_files)} file(s) selected**")
         
-        if st.button("🔍 Extract & Process", use_container_width=True, type="primary"):
+        if st.button("Extract & Process", use_container_width=True, type="primary"):
             st.session_state.extracted_invoices = []
             st.session_state.processing_complete = False
             
@@ -176,7 +175,7 @@ with col1:
                     invoice_text = extract_pdf_text_from_upload(uploaded_file)
                     
                     if not invoice_text:
-                        st.warning(f"⚠️ No extractable text in {uploaded_file.name}")
+                        st.warning(f"No extractable text in {uploaded_file.name}")
                         continue
                     
                     # Extract with LLM
@@ -191,7 +190,7 @@ with col1:
                     })
                 
                 except Exception as e:
-                    st.error(f"❌ Error processing {uploaded_file.name}: {str(e)}")
+                    st.error(f"Error processing {uploaded_file.name}: {str(e)}")
                 
                 progress_bar.progress((idx + 1) / len(uploaded_files))
             
@@ -200,10 +199,10 @@ with col1:
             st.session_state.processing_complete = True
 
 with col2:
-    st.subheader("📊 Extracted Data")
+    st.subheader("Extracted Data")
     
     if st.session_state.processing_complete and st.session_state.extracted_invoices:
-        st.success(f"✓ Successfully extracted {len(st.session_state.extracted_invoices)} invoice(s)")
+        st.success(f"Successfully extracted {len(st.session_state.extracted_invoices)} invoice(s)")
         
         # Display extracted invoices
         for idx, invoice_item in enumerate(st.session_state.extracted_invoices):
@@ -228,7 +227,7 @@ with col2:
                 st.write(f"**Address:** {invoice_data.get('seller_address') or 'N/A'}")
                 
                 # Show raw JSON
-                with st.expander("📋 Raw JSON"):
+                with st.expander("Raw JSON"):
                     st.json(invoice_data)
 
 # Database Operations
@@ -373,7 +372,7 @@ except Exception as e:
 st.divider()
 st.subheader("View Database")
 
-if st.button("🔄 Refresh Database View", use_container_width=True):
+if st.button("Refresh Database View", use_container_width=True):
     try:
         mongodb = MongoDBHandler()
         all_invoices = list(mongodb.collection.find({}))
@@ -395,7 +394,7 @@ if st.button("🔄 Refresh Database View", use_container_width=True):
             
             st.dataframe(table_data, use_container_width=True)
         else:
-            st.info("📭 No invoices in database yet.")
+            st.info("No invoices in database yet.")
     
     except Exception as e:
         st.error(f"Error fetching data: {str(e)}")

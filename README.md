@@ -1,4 +1,4 @@
-# 📄 Invoice Extractor - AI Expense Tracker
+# Invoice Extractor - AI Expense Tracker
 
 A modern, modular Python application for extracting invoice data using AI (Groq LLM) and storing it in MongoDB.
 
@@ -6,15 +6,15 @@ A modern, modular Python application for extracting invoice data using AI (Groq 
 
 ## Features
 
-✅ **Modular Architecture** - Clean separation of concerns  
-✅ **Dual Interface** - CLI for batch processing + Web UI for interactive use  
-✅ **AI-Powered Extraction** - Uses Groq LLM for intelligent data extraction  
-✅ **MongoDB Integration** - Persistent storage with duplicate detection  
-✅ **Batch Processing** - Process multiple PDFs automatically  
-✅ **Real-time Progress** - Visual feedback during extraction  
-✅ **JSON Export** - Download extracted data  
-✅ **Database Viewer** - View all stored invoices  
-✅ **Voice Queries** - Record questions and transcribe them locally with Whisper
+- **Modular Architecture** - Clean separation of concerns  
+- **Dual Interface** - CLI for batch processing + Web UI for interactive use  
+- **AI-Powered Extraction** - Uses Groq LLM for intelligent data extraction  
+- **MongoDB Integration** - Persistent storage with duplicate detection  
+- **Batch Processing** - Process multiple PDFs automatically  
+- **Real-time Progress** - Visual feedback during extraction  
+- **JSON Export** - Download extracted data  
+- **Database Viewer** - View all stored invoices  
+- **Voice Queries** - Record questions and transcribe them locally with Whisper
 
 ## Quick Start
 
@@ -77,7 +77,7 @@ AI Expense Tracker/
 
 ## Modules Overview
 
-### 🧩 Core Modules
+### Core Modules
 
 | Module | Purpose |
 |--------|---------|
@@ -88,7 +88,7 @@ AI Expense Tracker/
 | `invoice_validator.py` | Validate and normalize extracted data |
 | `file_handler.py` | JSON save/load operations |
 
-### 🔧 Main Components
+### Main Components
 
 | File | Purpose |
 |------|---------|
@@ -114,19 +114,19 @@ python pdf_extractor.py
 
 **Example Output:**
 ```
-📄 Found 2 PDF file(s) to process.
+Found 2 PDF file(s) to process.
 
 [1/2] Processing: invoice-1.pdf
-✓ Successfully extracted invoice #INV-2024-001
+Successfully extracted invoice #INV-2024-001
 
 [2/2] Processing: invoice-2.pdf
-✓ Successfully extracted invoice #INV-2024-002
+Successfully extracted invoice #INV-2024-002
 
-💾 Saving 2 invoice(s) to JSON...
-✓ Saved to output/invoices.json
+Saving 2 invoice(s) to JSON...
+Saved to output/invoices.json
 
-🗄️  Inserting into MongoDB with duplicate detection...
-✓ Successfully inserted 2 new invoice(s)
+Inserting into MongoDB with duplicate detection...
+Successfully inserted 2 new invoice(s)
 ```
 
 ### Web UI Mode - Interactive
@@ -136,14 +136,14 @@ streamlit run app.py
 ```
 
 **Features:**
-- 📤 Drag & drop PDF upload (single or multiple)
-- 🔍 Real-time extraction progress
-- 📊 Beautiful data display with expandable cards
-- 💾 One-click MongoDB save with duplicate detection
-- 📥 JSON export with download button
-- 📚 Database viewer showing all stored invoices
-- 🗄️ MongoDB connection status indicator
-- 🎤 Voice query input using local Whisper transcription
+- Drag & drop PDF upload (single or multiple)
+- Real-time extraction progress
+- Data display with expandable cards
+- One-click MongoDB save with duplicate detection
+- JSON export with download button
+- Database viewer showing all stored invoices
+- MongoDB connection status indicator
+- Voice query input using local Whisper transcription
 
 ### Voice Query Workflow
 
@@ -265,7 +265,7 @@ openai-whisper       # Local speech-to-text
 
 ## Documentation
 
-📋 **This README** - Quick reference and overview  
+**This README** - Quick reference and overview  
 
 ## Troubleshooting
 
@@ -314,12 +314,12 @@ config.py (Configuration)
 
 ## Best Practices
 
-✅ Always keep `.env` file with credentials  
-✅ Test new features with sample PDFs first  
-✅ Monitor MongoDB for storage usage  
-✅ Review extracted data for accuracy  
-✅ Keep backups of `output/invoices.json`  
-✅ Update Groq model when deprecated  
+- Always keep `.env` file with credentials  
+- Test new features with sample PDFs first  
+- Monitor MongoDB for storage usage  
+- Review extracted data for accuracy  
+- Keep backups of `output/invoices.json`  
+- Update Groq model when deprecated  
 
 ## Performance Tips
 
@@ -330,11 +330,11 @@ config.py (Configuration)
 
 ## Security Notes
 
-⚠️ Never commit `.env` file to version control  
-⚠️ Keep Groq API key confidential  
-⚠️ Use MongoDB authentication in production  
-⚠️ Validate all PDF inputs  
-⚠️ Sanitize extracted data before display  
+- Never commit `.env` file to version control  
+- Keep Groq API key confidential  
+- Use MongoDB authentication in production  
+- Validate all PDF inputs  
+- Sanitize extracted data before display  
 
 ## Contributing
 
@@ -363,14 +363,14 @@ For issues, questions, or suggestions:
 
 ## Future Enhancements
 
-- 🔍 OCR support for scanned PDFs
-- 📧 Email notification on completion
-- 🔔 Webhook integration
-- 📱 Mobile app interface
-- 🔐 User authentication
-- 📊 Advanced analytics dashboard
-- 🌍 Multi-language support
-- ☁️ Cloud deployment ready
+- OCR support for scanned PDFs
+- Email notification on completion
+- Webhook integration
+- Mobile app interface
+- User authentication
+- Advanced analytics dashboard
+- Multi-language support
+- Cloud deployment ready
 
 ---
 

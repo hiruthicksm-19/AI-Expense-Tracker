@@ -370,4 +370,4 @@ The system automatically handles:
 
 ---
 
-**This is a next-generation query system powered by AI!** 🚀
+**This is a query system powered by AI.**
