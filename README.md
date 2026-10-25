@@ -14,6 +14,7 @@ A modern, modular Python application for extracting invoice data using AI (Groq 
 ✅ **Real-time Progress** - Visual feedback during extraction  
 ✅ **JSON Export** - Download extracted data  
 ✅ **Database Viewer** - View all stored invoices  
+✅ **Voice Queries** - Record questions and transcribe them locally with Whisper
 
 ## Quick Start
 
@@ -38,6 +39,7 @@ GROQ_API_KEY=your_api_key_here
 MONGODB_URI=mongodb://localhost:27017
 MONGODB_DATABASE=invoice_tracker
 MONGODB_COLLECTION=invoices
+WHISPER_MODEL=base.en
 ```
 
 ### 3. Run
@@ -64,6 +66,8 @@ AI Expense Tracker/
 ├── modules/                    # Core modules
 │   ├── pdf_extractor_module.py # PDF text extraction
 │   ├── llm_module.py           # Groq LLM integration
+│   ├── stt_module.py           # Local Whisper speech-to-text
+│   ├── llm_query_generator.py  # Natural-language MongoDB queries
 │   ├── invoice_validator.py    # Data validation
 │   └── file_handler.py         # File I/O
 ├── invoices/                   # Input PDFs
@@ -79,6 +83,8 @@ AI Expense Tracker/
 |--------|---------|
 | `pdf_extractor_module.py` | Extract text from PDF files |
 | `llm_module.py` | Groq LLM integration for data extraction |
+| `stt_module.py` | Local Whisper transcription for voice queries |
+| `llm_query_generator.py` | Generate MongoDB pipelines and natural-language answers |
 | `invoice_validator.py` | Validate and normalize extracted data |
 | `file_handler.py` | JSON save/load operations |
 
@@ -137,6 +143,19 @@ streamlit run app.py
 - 📥 JSON export with download button
 - 📚 Database viewer showing all stored invoices
 - 🗄️ MongoDB connection status indicator
+- 🎤 Voice query input using local Whisper transcription
+
+### Voice Query Workflow
+
+1. Record a question using the microphone in the Query Assistant section.
+2. The local Whisper model transcribes the recording.
+3. The transcription is placed into the text input field.
+4. Review or edit the text if needed.
+5. Press **Search** to send the text to the LLM query pipeline.
+
+The recorded audio is processed locally and removed after transcription. The
+default model is `base.en`; set `WHISPER_MODEL` in `.env` to use another
+installed Whisper model, such as `small.en`.
 
 ## Extracted Invoice Fields
 
@@ -172,6 +191,7 @@ All configuration is in `config.py` and `.env`:
 - `MONGODB_URI` - MongoDB connection string
 - `MONGODB_DATABASE` - Database name
 - `MONGODB_COLLECTION` - Collection name
+- `WHISPER_MODEL` - Local Whisper model name (default: `base.en`)
 
 ### config.py
 - Directory paths
@@ -211,6 +231,23 @@ Display on UI
 MongoDB Handler (insert when user clicks Save)
 ```
 
+### Voice Query Processing
+```
+Microphone Recording
+  ↓
+Local Whisper Transcription
+  ↓
+Query Textbox
+  ↓
+User clicks Search
+  ↓
+LLM Query Generator
+  ↓
+MongoDB Aggregation Pipeline
+  ↓
+Natural-language Answer
+```
+
 ## Dependencies
 
 All dependencies are listed in `requirements.txt`:
@@ -222,12 +259,12 @@ pydantic             # Data validation
 python-dotenv        # Environment variables
 pymongo              # MongoDB driver
 streamlit            # Web UI framework
+certifi              # TLS certificates
+openai-whisper       # Local speech-to-text
 ```
 
 ## Documentation
 
-📖 **PROJECT_STRUCTURE.md** - Detailed module documentation  
-🚀 **SETUP.md** - Installation and setup instructions  
 📋 **This README** - Quick reference and overview  
 
 ## Troubleshooting
