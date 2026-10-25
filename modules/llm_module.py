@@ -3,6 +3,8 @@ Module for LLM-based invoice data extraction using Groq.
 """
 
 import json
+import os
+import certifi
 from groq import Groq
 
 from config import GROQ_API_KEY, MODEL_NAME, SYSTEM_PROMPT
@@ -13,6 +15,9 @@ class InvoiceExtractor:
     
     def __init__(self):
         """Initialize the Groq client."""
+        # Set SSL certificate for Groq API
+        os.environ['SSL_CERT_FILE'] = certifi.where()
+        
         self.client = Groq(api_key=GROQ_API_KEY)
         self.model = MODEL_NAME
         self.system_prompt = SYSTEM_PROMPT

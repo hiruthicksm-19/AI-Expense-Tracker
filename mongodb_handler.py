@@ -2,6 +2,7 @@
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
+import certifi
 
 load_dotenv()
 
@@ -13,7 +14,9 @@ class MongoDBHandler:
                 "MONGODB_URI",
                 "mongodb://localhost:27017"
             ),
-            serverSelectionTimeoutMS=5000
+            serverSelectionTimeoutMS=5000,
+            ssl=True,
+            tlsCAFile=certifi.where()
         )
 
         self.client.admin.command("ping")

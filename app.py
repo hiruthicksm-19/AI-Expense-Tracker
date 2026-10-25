@@ -9,14 +9,14 @@ Usage:
 """
 
 import streamlit as st
-from pathlib import Path
-
+import hashlib
 from config import OUTPUT_DIR
 from modules import (
     extract_pdf_text_from_upload,
     InvoiceExtractor,
     InvoiceValidator,
     FileHandler,
+    transcribe_audio,
 )
 from mongodb_handler import MongoDBHandler
 
@@ -287,62 +287,48 @@ st.divider()
 st.subheader("Query Assistant - Ask Questions About Your Expenses")
 
 try:
-    from modules import LLMQueryPipeline, transcribe_audio
+    from modules import LLMQueryPipeline
     
     mongodb_query = MongoDBHandler()
     query_pipeline = LLMQueryPipeline(mongodb_query.collection)
     
-    # Initialize session state for transcribed text
-    if "transcribed_text" not in st.session_state:
-        st.session_state.transcribed_text = ""
-    
-    # Query input layout with audio recording
+    # Record voice locally, transcribe it with Whisper, and put the result in
+    # the textbox. The LLM is called only after the user presses Search.
+    if "query_input" not in st.session_state:
+        st.session_state.query_input = ""
+    if "transcribed_audio_hash" not in st.session_state:
+        st.session_state.transcribed_audio_hash = None
+
+    audio_data = st.audio_input("Ask by voice")
+    if audio_data is not None:
+        audio_bytes = audio_data.getvalue()
+        audio_hash = hashlib.sha256(audio_bytes).hexdigest()
+
+        if audio_hash != st.session_state.transcribed_audio_hash:
+            try:
+                with st.spinner("Transcribing your question locally..."):
+                    st.session_state.query_input = transcribe_audio(
+                        audio_bytes,
+                        suffix=".wav",
+                    )
+                st.session_state.transcribed_audio_hash = audio_hash
+                st.rerun()
+            except Exception as error:
+                st.error(f"Voice transcription error: {error}")
+
     col_q1, col_q2 = st.columns([4, 1])
     
     with col_q1:
         question = st.text_input(
             "Ask a question about your expenses:",
             placeholder="e.g., What is the total spent? Show top 5 invoices",
-            key="query_input",
-            value=st.session_state.transcribed_text
+            key="query_input"
         )
     
     with col_q2:
         query_submit = st.button("Search", use_container_width=True, type="primary")
     
-    # Audio recording section with microphone
-    st.markdown("**📱 Voice Input:**")
-    
-    col_audio1, col_audio2 = st.columns([1, 4])
-    
-    with col_audio1:
-        st.markdown("🎤")
-    
-    with col_audio2:
-        audio_data = st.audio_input("Record your question")
-        
-        if audio_data is not None:
-            try:
-                with st.spinner("Transcribing audio..."):
-                    # Get audio bytes
-                    audio_bytes = audio_data.getvalue()
-                    
-                    # Transcribe
-                    transcribed = transcribe_audio(audio_bytes)
-                    
-                    # Update session state with transcribed text
-                    st.session_state.transcribed_text = transcribed
-                    
-                    st.success(f"✓ Transcribed: {transcribed}")
-                    
-                    # Update the text input with transcribed text
-                    st.rerun()
-            
-            except Exception as e:
-                st.error(f"Error transcribing audio: {str(e)}")
-    
-    # Process query
-    if query_submit and question:
+    if query_submit and question.strip():
         with st.spinner("Analyzing your question with AI..."):
             answer, metadata = query_pipeline.process_question(question)
             
@@ -375,14 +361,11 @@ try:
                 if metadata.get('raw_results'):
                     st.write("**Raw Results:**")
                     st.json(metadata['raw_results'])
-            
-            # Clear transcribed text after submission
-            st.session_state.transcribed_text = ""
     
     mongodb_query.close()
 
-except ImportError as e:
-    st.warning(f"Required module not available: {str(e)}")
+except ImportError:
+    st.warning("LLM Query module not available")
 except Exception as e:
     st.error(f"Query interface error: {str(e)}")
 

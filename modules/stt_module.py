@@ -1,70 +1,66 @@
-"""
-Speech-to-Text (STT) module using OpenAI Whisper.
+"""Local Whisper speech-to-text support for the query assistant.
 
-Provides functionality to transcribe audio to text.
+This module deliberately keeps recorded audio on the user's machine. The
+audio is written to a temporary file, transcribed by the local Whisper model,
+and deleted immediately after transcription.
 """
 
 import os
 import tempfile
+
 import streamlit as st
 import whisper
 
 
+WHISPER_MODEL_NAME = os.getenv("WHISPER_MODEL", "base.en")
+
+
 @st.cache_resource
 def load_whisper_model():
-    """
-    Load the local English-only Whisper model once.
-    
-    Uses cache to avoid reloading the model on every call.
-    
-    Returns:
-        whisper.Whisper: The loaded Whisper model
-    """
-    return whisper.load_model("tiny.en", device="cpu")
+    """Load and cache the configured local Whisper model."""
+    return whisper.load_model(WHISPER_MODEL_NAME)
 
 
-def transcribe_audio(audio_bytes: bytes) -> str:
-    """
-    Transcribe WAV audio bytes into English text.
-    
+def transcribe_audio(audio_bytes: bytes, suffix: str = ".wav") -> str:
+    """Transcribe recorded audio locally with Whisper.
+
     Args:
-        audio_bytes: Audio data in bytes (WAV format)
-        
+        audio_bytes: Bytes returned by Streamlit's ``st.audio_input``.
+        suffix: Temporary-file suffix matching the recording format.
+
     Returns:
-        str: Transcribed text
-        
+        Trimmed English transcription.
+
     Raises:
-        ValueError: If no audio provided or no speech recognized
+        ValueError: If audio is empty or no speech is recognized.
+        Exception: If Whisper cannot process the recording.
     """
     if not audio_bytes:
-        raise ValueError("No audio was provided.")
-    
-    model = load_whisper_model()
-    temp_path = None
-    
+        raise ValueError("No audio was recorded.")
+
+    temporary_path = None
     try:
-        # Write audio bytes to temporary file
-        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
-            temp_file.write(audio_bytes)
-            temp_path = temp_file.name
-        
-        # Transcribe using Whisper
-        result = model.transcribe(
-            temp_path,
+        with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as audio_file:
+            audio_file.write(audio_bytes)
+            temporary_path = audio_file.name
+
+        result = load_whisper_model().transcribe(
+            temporary_path,
             language="en",
             task="transcribe",
             fp16=False,
+            temperature=0.0,
         )
-        
-        # Extract and validate text
-        text = result["text"].strip()
-        
+
+        text = result.get("text", "").strip()
         if not text:
-            raise ValueError("No speech was recognized. Please try again.")
-        
+            raise ValueError("No speech was recognized. Please try recording again.")
+
         return text
-    
+    except ValueError:
+        raise
+    except Exception as error:
+        raise Exception(f"Error transcribing audio with Whisper: {error}") from error
     finally:
-        # Clean up temporary file
-        if temp_path and os.path.exists(temp_path):
-            os.remove(temp_path)
+        if temporary_path and os.path.exists(temporary_path):
+            os.remove(temporary_path)

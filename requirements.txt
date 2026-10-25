@@ -4,5 +4,5 @@ pydantic
 python-dotenv
 pymongo
 streamlit
+certifi
 openai-whisper
-

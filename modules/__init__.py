@@ -9,7 +9,7 @@ from .llm_module import InvoiceExtractor
 from .invoice_validator import InvoiceValidator
 from .file_handler import FileHandler
 from .llm_query_generator import LLMQueryGenerator, LLMQueryPipeline
-from .stt_module import load_whisper_model, transcribe_audio
+from .stt_module import transcribe_audio
 
 __all__ = [
     "extract_pdf_text",
@@ -19,6 +19,5 @@ __all__ = [
     "FileHandler",
     "LLMQueryGenerator",
     "LLMQueryPipeline",
-    "load_whisper_model",
     "transcribe_audio",
 ]

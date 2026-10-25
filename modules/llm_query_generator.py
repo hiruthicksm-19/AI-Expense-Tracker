@@ -10,6 +10,8 @@ Workflow:
 """
 
 import json
+import os
+import certifi
 from typing import Dict, Any, List, Tuple
 from groq import Groq
 from config import GROQ_API_KEY, MODEL_NAME
@@ -22,6 +24,9 @@ class LLMQueryGenerator:
     
     def __init__(self):
         """Initialize the LLM client."""
+        # Set SSL certificate for Groq API
+        os.environ['SSL_CERT_FILE'] = certifi.where()
+        
         self.client = Groq(api_key=GROQ_API_KEY)
         self.model = MODEL_NAME
     
